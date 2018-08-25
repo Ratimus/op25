@@ -205,13 +205,16 @@ function channel_status() {
 
 function adjacent_data(d) {
     if (Object.keys(d).length < 1) {
-        var html = "</div>";
+        var html = "<div/>";
         return html;
     }
     var html = "<div class=\"adjacent\">";
     html += "<table border=1 borderwidth=0 cellpadding=0 cellspacing=0 width=100%>";
     html += "<tr><th colspan=99 style=\"align: center\">Adjacent Sites</th></tr>";
     html += "<tr><th>Frequency</th><th>RFSS</th><th>Site</th><th>Uplink</th></tr>";
+    
+    
+    
     var ct = 0;
     for (var freq in d) {
         var color = "#d0d0d0";
@@ -220,7 +223,7 @@ function adjacent_data(d) {
         ct += 1;
         html += "<tr style=\"background-color: " + color + ";\"><td>" + freq / 1000000.0 + "</td><td>" + d[freq]["rfid"] + "</td><td>" + d[freq]["stid"] + "</td><td>" + (d[freq]["uplink"] / 1000000.0) + "</td></tr>";
     }
-    html += "</table></div></div><br><br>";
+    html += "</table></div>";
 
 // end adjacent sites table
 
@@ -238,6 +241,8 @@ function trunk_update(d) {
     for (var nac in d) {
         if (!is_digit(nac.charAt(0)))
             continue;
+        
+        html += "<div class=\"info\">";
         html += "<span class=\"nac\">";
         html += "NAC " + "0x" + parseInt(nac).toString(16) + " ";
         html += d[nac]['rxchan'] / 1000000.0;
@@ -264,13 +269,11 @@ function trunk_update(d) {
         if (fine_tune != null) {
             html += "<span class=\"label\">Fine tune offset: </span><span class=\"value\">" + fine_tune + "</span>";
         }
+        html += "<br><br>";
 
-        var div_s1 = document.getElementById("div_s1");
-        div_s1.innerHTML = html;
-
+        
 // system frequencies table
-        html = ""
-        html += "<div class=\"info\"><div class=\"system\">";
+        html += "<div class=\"system\">";
         html += "<table border=1 borderwidth=0 cellpadding=0 cellspacing=0 width=100%>"; // was width=350
         html += "<tr><th colspan=99 style=\"align: center\">System Frequencies</th></tr>";
         html += "<tr><th>Frequency</th><th>Last Seen</th><th colspan=2>Talkgoup ID</th><th>Count</th></tr>";
@@ -288,19 +291,23 @@ function trunk_update(d) {
         html += "</table></div>";
 
 // end system freqencies table
-
         html += adjacent_data(d[nac]['adjacent_data']);
+        
+        
+        html += "</div><br><br>";
     }
-
+    var div_s1 = document.getElementById("div_s1");
+        div_s1.innerHTML = html; 
+        
+        
     if (d['srcaddr'] != undefined)
         c_srcaddr = d['srcaddr']
     if (d['grpaddr'] != undefined)
         c_grpaddr = d['grpaddr']
     if (d['encrypted'] != undefined)
-        c_encrypted = d['encrypted']
-
-    var div_s3 = document.getElementById("div_s3");
-    div_s3.innerHTML = html;
+        c_encrypted = d['encrypted']     
+//     var div_s3 = document.getElementById("div_s3");
+//     div_s3.innerHTML = html;
 
     channel_status();
 }
@@ -341,6 +348,14 @@ function do_onload() {
 function do_update() {
     send_command("update", 0);
     f_debug();
+}
+
+function do_onbeforeunload() {
+alert('');
+send_command("quit", 0);
+    
+    
+//    f_debug();
 }
 
 function send_command(command, data) {
