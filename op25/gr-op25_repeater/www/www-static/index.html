@@ -9,8 +9,8 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 
-<body onload="javascript:do_onload();">
-
+<body onload="javascript:do_onload();" onbeforeunload="javascript:do_onbeforeunload();" >
+ 
 <form method="post" action="#" id="form_scan">
 
 <!-- nav bar -->
@@ -42,6 +42,10 @@
 	<input type="button" class="scan-button" name="lockout" value="LOCKOUT" onclick="javascript:f_scan_button(&quot;lockout&quot;);">
 	</div>
 
+	<div>
+	<input type="button" class="scan-button" name="quit" value="QUIT" onclick="javascript:f_scan_button(&quot;quit&quot;);">
+	</div>
+	
 	<div>
 		<!-- spacer -->
 	</div>
@@ -128,12 +132,7 @@
 </div>
 
 </form>
-
-
 <div id="div_status" style="display: none;">
-
-
-
 	<div id="div_s2" class="s2"> <!-- table -->
             <div class="s2_row">
 	        <div class="s2_cell_a"><span class="label">Frequency:</span></div>
@@ -152,9 +151,8 @@
 	        <div class="s2_cell_b" id="s2_src">&nbsp</div>
             </div>
 	</div> <!-- end table -->
-
 	<br>
-
+	<br>
 	<div id="div_s1" class="s1">
 	<!-- system freq -->
 
@@ -169,7 +167,6 @@
 	<!-- adjacent sites -->
 
 	</div>
-
 
 </div>
 
